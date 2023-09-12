@@ -3,6 +3,8 @@ import Room from "../components/Room";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import RoomSkeleton from "../components/RoomSkeleton";
+import { useQuery } from "react-query";
+import { getRooms } from "../Api";
 
 interface IPhotoSet {
     file: string;
@@ -21,20 +23,7 @@ interface IRoom {
 }
 
 export default function Home() {
-    const roomsURL = "http://127.0.0.1:8000/api/v1/rooms/";
-    const [isLoading, setIsLoading] = useState(true);
-    const [rooms, setRooms] = useState<IRoom[]>();
-
-    async function getRooms(URL: string) {
-        const res = await axios.get(URL);
-        setRooms(res.data);
-        setIsLoading(false);
-        console.log(res.data);
-    }
-
-    useEffect(() => {
-        getRooms(roomsURL);
-    }, []);
+    const { isLoading, data: rooms } = useQuery<IRoom[]>(["rooms"], getRooms);
 
     return (
         <Grid
@@ -55,7 +44,6 @@ export default function Home() {
         >
             {isLoading ? (
                 <>
-                    <RoomSkeleton></RoomSkeleton>
                     <RoomSkeleton></RoomSkeleton>
                     <RoomSkeleton></RoomSkeleton>
                     <RoomSkeleton></RoomSkeleton>
