@@ -4,6 +4,7 @@ import {
     Grid,
     HStack,
     Image,
+    Stack,
     Text,
     VStack,
 } from "@chakra-ui/react";
@@ -34,15 +35,27 @@ export default function Room() {
                 </Button>
             </Box>
 
-            <Grid templateColumns={"6fr 1fr"}>
-                <Text display={"block"} as="b" noOfLines={1} fontSize={"md"}>
-                    Ubud, Bali, Indonesia
-                </Text>
-                <HStack spacing={1} alignItems={"center"}>
-                    <FaStar size={12}></FaStar>
-                    <Text>5.0</Text>
-                </HStack>
-            </Grid>
+            {/* <Grid gap={2} templateColumns={"10fr 1fr"}> */}
+            <HStack w={"100%"} justifyContent={"space-between"}>
+                <Box>
+                    <Text
+                        display={"block"}
+                        as="b"
+                        noOfLines={1}
+                        fontSize={"md"}
+                    >
+                        Ubud, Bali, Indonesia
+                    </Text>
+                </Box>
+
+                <Box>
+                    <HStack spacing={1} alignItems={"center"}>
+                        <FaStar size={12}></FaStar>
+                        <Text>5.0</Text>
+                    </HStack>
+                </Box>
+            </HStack>
+            {/* </Grid> */}
 
             <Text fontSize={"sm"} color={"gary.600"}>
                 <Text as={"b"}>₩175,873</Text> /박
