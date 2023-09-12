@@ -24,6 +24,9 @@ export default function Room() {
                     src="https://a0.muscache.com/im/pictures/6943ce46-c64f-43b4-824b-5551735befcc.jpg?im_w=720"
                 ></Image>
                 <Button
+                    _hover={{
+                        color: "red.400",
+                    }}
                     variant={"unstyled"}
                     cursor={"pointer"}
                     color="white"
@@ -37,7 +40,7 @@ export default function Room() {
 
             {/* <Grid gap={2} templateColumns={"10fr 1fr"}> */}
             <HStack w={"100%"} justifyContent={"space-between"}>
-                <Box>
+                <Box w={"90%"}>
                     <Text
                         display={"block"}
                         as="b"
@@ -49,9 +52,15 @@ export default function Room() {
                 </Box>
 
                 <Box>
-                    <HStack spacing={1} alignItems={"center"}>
+                    <HStack
+                        _hover={{
+                            color: "yellow.400",
+                        }}
+                        spacing={1}
+                        alignItems={"center"}
+                    >
                         <FaStar size={12}></FaStar>
-                        <Text>5.0</Text>
+                        <Text>2.1</Text>
                     </HStack>
                 </Box>
             </HStack>

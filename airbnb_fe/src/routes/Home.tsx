@@ -5,10 +5,11 @@ import {
     HStack,
     Heading,
     Image,
+    Skeleton,
+    SkeletonText,
     Text,
     VStack,
 } from "@chakra-ui/react";
-import { FaRegHeart, FaStar } from "react-icons/fa";
 import Room from "../components/Room";
 
 export default function Home() {
@@ -29,12 +30,12 @@ export default function Home() {
                 "2xl": "repeat(5, 1fr)",
             }}
         >
-            {[
-                1, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3,
-                3, 3, 3, 3, 3, 3, 3, 3, 3, 1, 2, 3, 2, 1,
-            ].map((index) => (
-                <Room key={index}></Room>
-            ))}
+            <Box>
+                <Skeleton h={280} rounded={"2xl"} mb={6}></Skeleton>
+                <SkeletonText noOfLines={1} mb={5}></SkeletonText>
+                <SkeletonText noOfLines={1} w={"40%"}></SkeletonText>
+            </Box>
+            <Room></Room>
         </Grid>
     );
 }
