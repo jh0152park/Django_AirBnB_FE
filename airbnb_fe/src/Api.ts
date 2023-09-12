@@ -8,3 +8,8 @@ export async function getRooms() {
     const res = await axiosInstance.get("rooms/");
     return res.data;
 }
+
+export async function getRoom(roomPk: string) {
+    const res = await axiosInstance.get(`rooms/${roomPk}`);
+    return res.data;
+}
