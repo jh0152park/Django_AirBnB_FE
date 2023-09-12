@@ -33,7 +33,7 @@ export default function Header() {
     return (
         <HStack
             py={5}
-            px={10}
+            px={20}
             borderBottomWidth={1}
             justifyContent={"space-between"}
         >
