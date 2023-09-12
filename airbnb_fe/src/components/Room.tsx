@@ -10,7 +10,27 @@ import {
 } from "@chakra-ui/react";
 import { FaRegHeart, FaStar } from "react-icons/fa";
 
-export default function Room() {
+interface RoomProps {
+    imageUrl: string;
+    name: string;
+    room_rate: number;
+    price: number;
+    city: string;
+    country: string;
+}
+
+function numberWithCommas(number: number) {
+    return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+export default function Room({
+    imageUrl,
+    name,
+    room_rate,
+    price,
+    city,
+    country,
+}: RoomProps) {
     return (
         <VStack alignItems={"flex-start"}>
             <Box
@@ -19,10 +39,7 @@ export default function Room() {
                 rounded={"2xl"}
                 mb={2}
             >
-                <Image
-                    minHeight="280"
-                    src="https://a0.muscache.com/im/pictures/6943ce46-c64f-43b4-824b-5551735befcc.jpg?im_w=720"
-                ></Image>
+                <Image minHeight="280" src={imageUrl}></Image>
                 <Button
                     _hover={{
                         color: "red.400",
@@ -39,35 +56,40 @@ export default function Room() {
             </Box>
 
             {/* <Grid gap={2} templateColumns={"10fr 1fr"}> */}
-            <HStack w={"100%"} justifyContent={"space-between"}>
-                <Box w={"90%"}>
-                    <Text
-                        display={"block"}
-                        as="b"
-                        noOfLines={1}
-                        fontSize={"md"}
-                    >
-                        Ubud, Bali, Indonesia
-                    </Text>
-                </Box>
+            <Box>
+                <HStack w={"100%"} justifyContent={"space-between"}>
+                    <Box w={"90%"}>
+                        <Text
+                            display={"block"}
+                            as="b"
+                            noOfLines={1}
+                            fontSize={"md"}
+                        >
+                            {name}
+                        </Text>
+                    </Box>
 
-                <Box>
-                    <HStack
-                        _hover={{
-                            color: "yellow.400",
-                        }}
-                        spacing={1}
-                        alignItems={"center"}
-                    >
-                        <FaStar size={12}></FaStar>
-                        <Text>2.1</Text>
-                    </HStack>
-                </Box>
-            </HStack>
+                    <Box>
+                        <HStack
+                            _hover={{
+                                color: "yellow.400",
+                            }}
+                            spacing={1}
+                            alignItems={"center"}
+                        >
+                            <FaStar size={12}></FaStar>
+                            <Text>{room_rate}</Text>
+                        </HStack>
+                    </Box>
+                </HStack>
+                <Text fontSize={"sm"}>
+                    {city}, {country}
+                </Text>
+            </Box>
             {/* </Grid> */}
 
             <Text fontSize={"sm"} color={"gary.600"}>
-                <Text as={"b"}>₩175,873</Text> /박
+                <Text as={"b"}>₩{numberWithCommas(price)}</Text> / night
             </Text>
         </VStack>
     );
