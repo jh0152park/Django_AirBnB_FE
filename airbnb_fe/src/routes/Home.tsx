@@ -1,26 +1,8 @@
-import { Grid } from "@chakra-ui/react";
 import Room from "../components/Room";
-import { useEffect, useState } from "react";
-import axios from "axios";
 import RoomSkeleton from "../components/RoomSkeleton";
+import { Grid } from "@chakra-ui/react";
 import { useQuery } from "react-query";
 import { getRooms } from "../Api";
-
-interface IPhotoSet {
-    file: string;
-    description: string;
-}
-
-interface IRoom {
-    pk: number;
-    name: string;
-    country: string;
-    city: string;
-    price: number;
-    room_rate: number;
-    is_owner: boolean;
-    photo_set: IPhotoSet[];
-}
 
 export default function Home() {
     const { isLoading, data: rooms } = useQuery<IRoom[]>(["rooms"], getRooms);
