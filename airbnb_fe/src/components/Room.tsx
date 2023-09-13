@@ -1,25 +1,6 @@
-import {
-    Box,
-    Button,
-    Grid,
-    HStack,
-    Image,
-    Stack,
-    Text,
-    VStack,
-} from "@chakra-ui/react";
+import { Box, Button, HStack, Image, Text, VStack } from "@chakra-ui/react";
 import { FaRegHeart, FaStar } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
-interface RoomProps {
-    pk: number;
-    imageUrl: string;
-    name: string;
-    room_rate: number;
-    price: number;
-    city: string;
-    country: string;
-}
 
 function numberWithCommas(number: number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -33,7 +14,7 @@ export default function Room({
     price,
     city,
     country,
-}: RoomProps) {
+}: IRoomProps) {
     return (
         <Link to={`/rooms/${pk}`}>
             <VStack alignItems={"flex-start"}>
