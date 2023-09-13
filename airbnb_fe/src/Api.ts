@@ -1,4 +1,5 @@
 import axios from "axios";
+import { QueryFunctionContext } from "react-query";
 
 const axiosInstance = axios.create({
     baseURL: "http://127.0.0.1:8000/api/v1/",
@@ -9,7 +10,8 @@ export async function getRooms() {
     return res.data;
 }
 
-export async function getRoom(roomPk: string) {
+export async function getRoom({ queryKey }: QueryFunctionContext) {
+    const [_, roomPk] = queryKey;
     const res = await axiosInstance.get(`rooms/${roomPk}`);
     return res.data;
 }
