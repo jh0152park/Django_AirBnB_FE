@@ -15,3 +15,9 @@ export async function getRoom({ queryKey }: QueryFunctionContext) {
     const res = await axiosInstance.get(`rooms/${roomPk}`);
     return res.data;
 }
+
+export async function getRoomReviews({ queryKey }: QueryFunctionContext) {
+    const [_, roomPk] = queryKey;
+    const res = await axiosInstance.get(`rooms/${roomPk}/reviews`);
+    return res.data;
+}

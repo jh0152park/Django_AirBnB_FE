@@ -58,10 +58,16 @@ interface IRoomDetail {
     city: string;
     price: number;
     rooms: number;
-    toilerts: number;
+    toilets: number;
     description: string;
     address: string;
     pet_allow: boolean;
     kink: string;
     review_count: number;
+}
+
+interface IReview {
+    user: IOwner;
+    review: string;
+    rating: number;
 }
