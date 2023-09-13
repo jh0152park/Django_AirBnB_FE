@@ -4,6 +4,7 @@ import { getRoom, getRoomReviews } from "../Api";
 import {
     Avatar,
     Box,
+    Container,
     Grid,
     GridItem,
     HStack,
@@ -119,8 +120,8 @@ export default function RoomDetail() {
             </HStack>
 
             <Box mt={10} alignItems={"center"}>
-                <Skeleton isLoaded={!isLoading}>
-                    <Heading>
+                <Skeleton isLoaded={!isLoading} h="40px" w={"20%"}>
+                    <Heading fontSize={"2xl"} mb={5}>
                         <HStack w="100vw" as={"b"} mt={-2}>
                             <FaStar></FaStar>
                             <Text ml={-1}>{data?.room_rate}</Text>
@@ -132,6 +133,108 @@ export default function RoomDetail() {
                         </HStack>
                     </Heading>
                 </Skeleton>
+
+                <Container marginX={"none"} maxW={"container.xl"} mt={10}>
+                    <Grid templateColumns={"repeat(2, 1fr)"} gap={10}>
+                        {isReviewsLoading
+                            ? [1, 2, 3, 4].map((dummy) => (
+                                  <Box>
+                                      <VStack alignItems={"flex-start"}>
+                                          <HStack>
+                                              <Avatar size={"md"}></Avatar>
+                                              <VStack
+                                                  alignItems={"flex-start"}
+                                                  spacing={0}
+                                              >
+                                                  <Skeleton
+                                                      w={"200px"}
+                                                      h="25px"
+                                                  >
+                                                      <Heading fontSize={"md"}>
+                                                          Loading...
+                                                      </Heading>
+                                                  </Skeleton>
+
+                                                  <Skeleton w={"50px"} h="10px">
+                                                      <HStack spacing={1}>
+                                                          <FaStar
+                                                              size={"12px"}
+                                                          ></FaStar>
+                                                          <Text>
+                                                              Loading...
+                                                          </Text>
+                                                      </HStack>
+                                                  </Skeleton>
+                                              </VStack>
+                                          </HStack>
+                                          <Skeleton w={"500px"} h={"150px"}>
+                                              <Text>Loading...</Text>
+                                          </Skeleton>
+                                      </VStack>
+                                  </Box>
+                              ))
+                            : ReviewData?.map((review, index) => (
+                                  <Box>
+                                      <VStack alignItems={"flex-start"}>
+                                          <HStack>
+                                              <Avatar
+                                                  name={review.user.name}
+                                                  src={
+                                                      review.user
+                                                          .profile_picture
+                                                  }
+                                                  size={"md"}
+                                              ></Avatar>
+                                              <VStack
+                                                  alignItems={"flex-start"}
+                                                  spacing={0}
+                                              >
+                                                  <Heading fontSize={"md"}>
+                                                      {review.user.name}
+                                                  </Heading>
+                                                  <HStack spacing={1}>
+                                                      <FaStar
+                                                          size={"12px"}
+                                                      ></FaStar>
+                                                      <Text>
+                                                          {review.rating}
+                                                      </Text>
+                                                  </HStack>
+                                              </VStack>
+                                          </HStack>
+                                          <Text>{review.review}</Text>
+                                      </VStack>
+                                  </Box>
+                              ))}
+
+                        {/* {ReviewData?.map((review, index) => (
+                            <Box>
+                                <VStack alignItems={"flex-start"}>
+                                    <HStack>
+                                        <Avatar
+                                            name={review.user.name}
+                                            src={review.user.profile_picture}
+                                            size={"md"}
+                                        ></Avatar>
+                                        <VStack
+                                            alignItems={"flex-start"}
+                                            spacing={0}
+                                        >
+                                            <Heading fontSize={"md"}>
+                                                {review.user.name}
+                                            </Heading>
+                                            <HStack spacing={1}>
+                                                <FaStar size={"12px"}></FaStar>
+                                                <Text>{review.rating}</Text>
+                                            </HStack>
+                                        </VStack>
+                                    </HStack>
+                                    <Text>{review.review}</Text>
+                                </VStack>
+                            </Box>
+                        ))} */}
+                    </Grid>
+                </Container>
             </Box>
         </Box>
     );
