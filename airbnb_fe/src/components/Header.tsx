@@ -21,6 +21,7 @@ import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import useUser from "../lib/useUser";
 import { logOut } from "../Api";
+import { useQueryClient } from "react-query";
 
 export default function Header() {
     const {
@@ -36,25 +37,29 @@ export default function Header() {
     } = useDisclosure();
 
     const toast = useToast();
+
     const { colorMode, toggleColorMode } = useColorMode();
     const logoColor = useColorModeValue("red.500", "red.200");
     const Icon = useColorModeValue(<FaMoon />, <BsSunFill />);
-
     const { userLoading, user, isLooggedIn } = useUser();
+    const queryClient = useQueryClient();
+
     async function onLogOut() {
-        // const data = await logOut();
-        // console.log(data);
         const toastId = toast({
             title: "Login out...",
             description: "Try to log out",
             status: "loading",
         });
+
+        const data = await logOut();
+
         setTimeout(() => {
             toast.update(toastId, {
                 title: "Log out successed",
                 description: "Good bye!",
                 status: "success",
             });
+            queryClient.refetchQueries(["me"]);
         }, 2000);
     }
 

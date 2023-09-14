@@ -21,7 +21,7 @@ export default function SocialLogin() {
                 <Button
                     w={"100%"}
                     leftIcon={<FaGithub />}
-                    colorScheme="telegram"
+                    // colorScheme="telegram"
                 >
                     Continue with Github
                 </Button>
