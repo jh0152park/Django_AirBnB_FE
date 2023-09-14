@@ -21,3 +21,8 @@ export async function getRoomReviews({ queryKey }: QueryFunctionContext) {
     const res = await axiosInstance.get(`rooms/${roomPk}/reviews`);
     return res.data;
 }
+
+export async function getMe() {
+    const res = await axiosInstance.get(`users/me`);
+    return res.data;
+}

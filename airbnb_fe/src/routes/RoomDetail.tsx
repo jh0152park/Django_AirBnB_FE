@@ -206,33 +206,6 @@ export default function RoomDetail() {
                                       </VStack>
                                   </Box>
                               ))}
-
-                        {/* {ReviewData?.map((review, index) => (
-                            <Box>
-                                <VStack alignItems={"flex-start"}>
-                                    <HStack>
-                                        <Avatar
-                                            name={review.user.name}
-                                            src={review.user.profile_picture}
-                                            size={"md"}
-                                        ></Avatar>
-                                        <VStack
-                                            alignItems={"flex-start"}
-                                            spacing={0}
-                                        >
-                                            <Heading fontSize={"md"}>
-                                                {review.user.name}
-                                            </Heading>
-                                            <HStack spacing={1}>
-                                                <FaStar size={"12px"}></FaStar>
-                                                <Text>{review.rating}</Text>
-                                            </HStack>
-                                        </VStack>
-                                    </HStack>
-                                    <Text>{review.review}</Text>
-                                </VStack>
-                            </Box>
-                        ))} */}
                     </Grid>
                 </Container>
             </Box>
