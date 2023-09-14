@@ -3,6 +3,7 @@ import { QueryFunctionContext } from "react-query";
 
 const axiosInstance = axios.create({
     baseURL: "http://127.0.0.1:8000/api/v1/",
+    withCredentials: true,
 });
 
 export async function getRooms() {
@@ -24,5 +25,10 @@ export async function getRoomReviews({ queryKey }: QueryFunctionContext) {
 
 export async function getMe() {
     const res = await axiosInstance.get(`users/me`);
+    return res.data;
+}
+
+export async function logOut() {
+    const res = await axiosInstance.post(`users/log-out`);
     return res.data;
 }
