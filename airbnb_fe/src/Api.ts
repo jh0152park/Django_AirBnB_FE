@@ -1,3 +1,4 @@
+import Cookie from "js-cookie";
 import axios from "axios";
 import { QueryFunctionContext } from "react-query";
 
@@ -29,6 +30,10 @@ export async function getMe() {
 }
 
 export async function logOut() {
-    const res = await axiosInstance.post(`users/log-out`);
+    const res = await axiosInstance.post(`users/log-out`, null, {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+    });
     return res.data;
 }
