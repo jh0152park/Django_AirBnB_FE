@@ -71,3 +71,16 @@ interface IReview {
     review: string;
     rating: number;
 }
+
+interface IMe {
+    last_login: string;
+    username: string;
+    email: string;
+    date_joined: string;
+    name: string;
+    profile_picture: string;
+    gender: string;
+    language: string;
+    currency: string;
+    is_host: boolean;
+}
