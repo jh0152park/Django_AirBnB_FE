@@ -1,24 +1,43 @@
-import {
-    Button,
-    Heading,
-    Spinner,
-    Text,
-    VStack,
-    useColorModeValue,
-} from "@chakra-ui/react";
+import { Heading, Spinner, Text, VStack, useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { githubLogin } from "../Api";
+import { useQueryClient } from "react-query";
 
 export default function GithubConfirm() {
     const location = useLocation();
+    const toast = useToast();
+    const queryClient = useQueryClient();
+    const navigate = useNavigate();
+
+    async function loginConfirm() {
+        const code = new URLSearchParams(location.search).get("code");
+
+        if (code) {
+            const status = await githubLogin(code);
+
+            if (status === 200) {
+                toast({
+                    status: "success",
+                    title: "Login success",
+                    description: "Good to see you again 😎",
+                });
+                queryClient.refetchQueries(["me"]);
+            } else {
+                toast({
+                    status: "error",
+                    title: "Login failed",
+                    description:
+                        "Someting went wrong...😭 Please try check on your github account",
+                });
+            }
+            navigate("/");
+        }
+    }
 
     useEffect(() => {
-        const code = new URLSearchParams(location.search).get("code");
-        if (code) {
-            githubLogin(code as string);
-        }
-    }, []);
+        loginConfirm();
+    });
 
     return (
         <VStack justifyContent={"center"} mt={40}>
