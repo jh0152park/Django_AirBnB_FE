@@ -22,6 +22,7 @@ import SignupModal from "./SignupModal";
 import useUser from "../lib/useUser";
 import { logOut } from "../Api";
 import { useQueryClient } from "react-query";
+import { Link } from "react-router-dom";
 
 export default function Header() {
     const {
@@ -38,6 +39,7 @@ export default function Header() {
 
     const toast = useToast();
 
+    // eslint-disable-next-line
     const { colorMode, toggleColorMode } = useColorMode();
     const logoColor = useColorModeValue("red.500", "red.200");
     const Icon = useColorModeValue(<FaMoon />, <BsSunFill />);
@@ -51,7 +53,7 @@ export default function Header() {
             status: "loading",
         });
 
-        const data = await logOut();
+        await logOut();
 
         setTimeout(() => {
             toast.update(toastId, {
@@ -80,7 +82,9 @@ export default function Header() {
             }}
         >
             <Box color={logoColor}>
-                <FaAirbnb size={"48"}></FaAirbnb>
+                <Link to="/">
+                    <FaAirbnb size={"48"}></FaAirbnb>
+                </Link>
             </Box>
 
             <HStack spacing={2}>

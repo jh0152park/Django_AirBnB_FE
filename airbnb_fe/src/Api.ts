@@ -13,12 +13,14 @@ export async function getRooms() {
 }
 
 export async function getRoom({ queryKey }: QueryFunctionContext) {
+    // eslint-disable-next-line
     const [_, roomPk] = queryKey;
     const res = await axiosInstance.get(`rooms/${roomPk}`);
     return res.data;
 }
 
 export async function getRoomReviews({ queryKey }: QueryFunctionContext) {
+    // eslint-disable-next-line
     const [_, roomPk] = queryKey;
     const res = await axiosInstance.get(`rooms/${roomPk}/reviews`);
     return res.data;

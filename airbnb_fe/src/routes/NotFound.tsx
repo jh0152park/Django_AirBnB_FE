@@ -1,6 +1,5 @@
 import {
     Button,
-    Center,
     Heading,
     Text,
     VStack,
