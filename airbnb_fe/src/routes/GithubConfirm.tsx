@@ -12,7 +12,6 @@ export default function GithubConfirm() {
 
     async function loginConfirm() {
         const code = new URLSearchParams(location.search).get("code");
-
         if (code) {
             const status = await githubLogin(code);
 
@@ -36,8 +35,9 @@ export default function GithubConfirm() {
     }
 
     useEffect(() => {
+        console.log("run login confirm");
         loginConfirm();
-    });
+    }, []);
 
     return (
         <VStack justifyContent={"center"} mt={40}>
