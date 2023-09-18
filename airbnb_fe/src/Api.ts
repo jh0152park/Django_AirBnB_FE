@@ -52,3 +52,16 @@ export async function githubLogin(code: string) {
     );
     return res.status;
 }
+
+export async function kakaoLogin(code: string) {
+    const res = await axiosInstance.post(
+        `users/kakao`,
+        { code },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            },
+        }
+    );
+    return res.status;
+}

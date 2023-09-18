@@ -47,8 +47,6 @@ function Header() {
     const { userLoading, user, isLooggedIn } = useUser();
     const queryClient = useQueryClient();
 
-    console.log("render header");
-
     async function onLogOut() {
         const toastId = toast({
             title: "Login out...",
