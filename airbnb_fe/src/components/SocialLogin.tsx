@@ -14,7 +14,6 @@ export default function SocialLogin() {
         scope: "read:user,user:email",
     };
     const github_params = new URLSearchParams(githubParams).toString();
-    console.log(github_params);
 
     return (
         <Box mb={4}>
