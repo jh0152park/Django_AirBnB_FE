@@ -5,6 +5,7 @@ export default function useUser() {
     const { isLoading, data, isError } = useQuery<IMe>(["me"], getMe, {
         retry: false,
     });
+
     return {
         userLoading: isLoading,
         user: data,

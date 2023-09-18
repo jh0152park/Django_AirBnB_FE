@@ -23,8 +23,9 @@ import useUser from "../lib/useUser";
 import { logOut } from "../Api";
 import { useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
+import React from "react";
 
-export default function Header() {
+function Header() {
     const {
         isOpen: isLoginOpen,
         onClose: OnLoginClose,
@@ -45,6 +46,8 @@ export default function Header() {
     const Icon = useColorModeValue(<FaMoon />, <BsSunFill />);
     const { userLoading, user, isLooggedIn } = useUser();
     const queryClient = useQueryClient();
+
+    console.log("render header");
 
     async function onLogOut() {
         const toastId = toast({
@@ -136,3 +139,5 @@ export default function Header() {
         </Stack>
     );
 }
+
+export default React.memo(Header);
