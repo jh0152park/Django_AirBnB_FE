@@ -1,10 +1,10 @@
 import { Heading, Spinner, Text, VStack, useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { githubLogin } from "../Api";
+import { kakaoLogin } from "../Api";
 import { useQueryClient } from "react-query";
 
-export default function GithubConfirm() {
+export default function KakaoConfirm() {
     const location = useLocation();
     const toast = useToast();
     const queryClient = useQueryClient();
@@ -13,24 +13,26 @@ export default function GithubConfirm() {
     async function loginConfirm() {
         const code = new URLSearchParams(location.search).get("code");
         if (code) {
-            const status = await githubLogin(code);
+            console.log(code);
 
-            if (status === 200) {
-                toast({
-                    status: "success",
-                    title: "Login success",
-                    description: "Good to see you again 😎",
-                });
-                queryClient.refetchQueries(["me"]);
-            } else {
-                toast({
-                    status: "error",
-                    title: "Login failed",
-                    description:
-                        "Someting went wrong...😭 Please try check on your github account",
-                });
-            }
-            navigate("/");
+            // const status = await kakaoLogin(code);
+
+            // if (status === 200) {
+            //     toast({
+            //         status: "success",
+            //         title: "Login success",
+            //         description: "Good to see you again 😎",
+            //     });
+            //     queryClient.refetchQueries(["me"]);
+            // } else {
+            //     toast({
+            //         status: "error",
+            //         title: "Login failed",
+            //         description:
+            //             "Someting went wrong...😭 Please try check on your github account",
+            //     });
+            // }
+            // navigate("/");
         }
     }
 
