@@ -15,24 +15,24 @@ export default function KakaoConfirm() {
         if (code) {
             console.log(code);
 
-            // const status = await kakaoLogin(code);
+            const status = await kakaoLogin(code);
 
-            // if (status === 200) {
-            //     toast({
-            //         status: "success",
-            //         title: "Login success",
-            //         description: "Good to see you again 😎",
-            //     });
-            //     queryClient.refetchQueries(["me"]);
-            // } else {
-            //     toast({
-            //         status: "error",
-            //         title: "Login failed",
-            //         description:
-            //             "Someting went wrong...😭 Please try check on your github account",
-            //     });
-            // }
-            // navigate("/");
+            if (status === 200) {
+                toast({
+                    status: "success",
+                    title: "Login success",
+                    description: "Good to see you again 😎",
+                });
+                queryClient.refetchQueries(["me"]);
+            } else {
+                toast({
+                    status: "error",
+                    title: "Login failed",
+                    description:
+                        "Someting went wrong...😭 Please try check on your github account",
+                });
+            }
+            navigate("/");
         }
     }
 
@@ -42,7 +42,7 @@ export default function KakaoConfirm() {
 
     return (
         <VStack justifyContent={"center"} mt={40}>
-            <Heading>Login with giuhub...</Heading>
+            <Heading>Login with kakao...</Heading>
             <Text>Don't go anywhere, please stay here!</Text>
             <Spinner mt={5} size={"lg"}></Spinner>
         </VStack>
