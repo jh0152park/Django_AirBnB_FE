@@ -10,6 +10,7 @@ import {
     ModalContent,
     ModalHeader,
     ModalOverlay,
+    Text,
     VStack,
 } from "@chakra-ui/react";
 import { FaLock, FaUserAlt } from "react-icons/fa";
@@ -22,17 +23,24 @@ interface LoginModelProps {
     onClose: () => void;
 }
 
+interface ILoginForm {
+    username: string;
+    password: string;
+}
+
 export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
-    // const { register, setValue, handleSubmit } = useForm();
-    const usernameForm = useForm();
+    const {
+        register,
+        setValue,
+        handleSubmit,
+        watch,
+        formState: { errors },
+    } = useForm<ILoginForm>();
 
-    function usernameSubmit() {
-        usernameForm.setValue("username", "");
+    function usernameSubmit(data: ILoginForm) {
+        setValue("username", "");
+        setValue("password", "");
     }
-
-    useEffect(() => {
-        console.log(usernameForm.getValues("username"));
-    }, [usernameForm.watch("username")]);
 
     return (
         <Modal isOpen={isOpen} onClose={onClose}>
@@ -40,10 +48,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
             <ModalContent>
                 <ModalHeader>Log in</ModalHeader>
                 <ModalCloseButton></ModalCloseButton>
-                <ModalBody
-                    as={"form"}
-                    onSubmit={usernameForm.handleSubmit(usernameSubmit)}
-                >
+                <ModalBody as={"form"} onSubmit={handleSubmit(usernameSubmit)}>
                     <VStack>
                         <InputGroup>
                             <InputLeftElement
@@ -54,13 +59,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
                                 }
                             ></InputLeftElement>
                             <Input
-                                {...usernameForm.register("username", {
-                                    required: "Please, let me know your name!",
+                                {...register("username", {
+                                    required: "Username is necessary!",
                                 })}
+                                isInvalid={Boolean(errors.username?.message)}
                                 variant={"filled"}
                                 placeholder="Username"
                                 required
                             ></Input>
+                            {/* <Text fontSize={"sm"} color={"red.500"}>
+                                {errors.username?.message}
+                            </Text> */}
                         </InputGroup>
 
                         <InputGroup>
@@ -72,10 +81,17 @@ export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
                                 }
                             ></InputLeftElement>
                             <Input
+                                {...register("password", {
+                                    required: "Password is necessary!",
+                                })}
+                                isInvalid={Boolean(errors.password?.message)}
                                 variant={"filled"}
                                 placeholder="Password"
                                 required
                             ></Input>
+                            {/* <Text fontSize={"sm"} color={"red.500"}>
+                                {errors.password?.message}
+                            </Text> */}
                         </InputGroup>
                     </VStack>
 
