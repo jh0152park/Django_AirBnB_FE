@@ -38,6 +38,7 @@ export default function GithubConfirm() {
             navigate("/");
         },
     });
+    // https://github.com/jh0152park/Django_AirBnB_FE/commit/4ca9a2c816c91d7db9a4bd551daa9c5e081bc961
 
     useEffect(() => {
         if (code) {

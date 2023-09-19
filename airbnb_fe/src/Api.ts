@@ -53,7 +53,7 @@ export async function githubLogin({ code }: { code: string }) {
     return res.status;
 }
 
-export async function kakaoLogin(code: string) {
+export async function kakaoLogin({ code }: { code: string }) {
     const res = await axiosInstance.post(
         `users/kakao`,
         { code },

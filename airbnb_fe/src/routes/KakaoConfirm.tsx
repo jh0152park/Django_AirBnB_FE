@@ -2,7 +2,7 @@ import { Heading, Spinner, Text, VStack, useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { kakaoLogin } from "../Api";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 export default function KakaoConfirm() {
     const location = useLocation();
@@ -10,34 +10,38 @@ export default function KakaoConfirm() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
-    async function loginConfirm() {
-        const code = new URLSearchParams(location.search).get("code");
-        if (code) {
-            console.log(code);
+    const code = new URLSearchParams(location.search).get("code");
+    const mutation = useMutation(kakaoLogin, {
+        onMutate: () => {
+            //when start mutation
+            console.log("start mutation the kakao login function");
+        },
 
-            const status = await kakaoLogin(code);
-
-            if (status === 200) {
-                toast({
-                    status: "success",
-                    title: "Login success",
-                    description: "Good to see you again 😎",
-                });
-                queryClient.refetchQueries(["me"]);
-            } else {
-                toast({
-                    status: "error",
-                    title: "Login failed",
-                    description:
-                        "Someting went wrong...😭 Please try check on your github account",
-                });
-            }
+        onSuccess: () => {
+            toast({
+                status: "success",
+                title: "Login success",
+                description: "Good to see you again 😎",
+            });
+            queryClient.refetchQueries(["me"]);
             navigate("/");
-        }
-    }
+        },
+
+        onError: () => {
+            toast({
+                status: "error",
+                title: "Login failed",
+                description:
+                    "Someting went wrong...😭 Please try check on your github account",
+            });
+            navigate("/");
+        },
+    });
 
     useEffect(() => {
-        loginConfirm();
+        if (code) {
+            mutation.mutate({ code });
+        }
     }, []);
 
     return (
