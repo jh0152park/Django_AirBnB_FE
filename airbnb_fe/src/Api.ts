@@ -81,3 +81,21 @@ export async function usernameLogIn({
     );
     return res.data;
 }
+
+export async function signUpUser({
+    name,
+    username,
+    email,
+    password,
+}: ISignUpVariables) {
+    const res = await axiosInstance.post(
+        `users/create`,
+        { name, username, email, password },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            },
+        }
+    );
+    return res.data;
+}

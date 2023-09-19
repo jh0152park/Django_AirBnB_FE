@@ -97,3 +97,18 @@ interface IUsernameLogInSuccess {
 interface IUsernameLogInFail {
     login_success: boolean;
 }
+
+interface ISignUpVariables {
+    name: string;
+    username: string;
+    email: string;
+    password: string;
+}
+
+interface ISignUpSuccess {
+    success: string;
+}
+
+interface ISignUpError {
+    fail: string;
+}

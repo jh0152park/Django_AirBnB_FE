@@ -121,6 +121,7 @@ export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
                                 isInvalid={Boolean(errors.password?.message)}
                                 variant={"filled"}
                                 placeholder="Password"
+                                type="password"
                             ></Input>
                         </InputGroup>
                     </VStack>
