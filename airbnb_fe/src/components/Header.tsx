@@ -10,6 +10,7 @@ import {
     MenuItem,
     MenuList,
     Stack,
+    ToastId,
     useColorMode,
     useColorModeValue,
     useDisclosure,
@@ -21,9 +22,9 @@ import LoginModal from "./LoginModal";
 import SignupModal from "./SignupModal";
 import useUser from "../lib/useUser";
 import { logOut } from "../Api";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useRef } from "react";
 
 function Header() {
     const {
@@ -39,32 +40,37 @@ function Header() {
     } = useDisclosure();
 
     const toast = useToast();
+    const toastId = useRef<ToastId>();
 
     // eslint-disable-next-line
     const { colorMode, toggleColorMode } = useColorMode();
+    const { userLoading, user, isLooggedIn } = useUser();
+
     const logoColor = useColorModeValue("red.500", "red.200");
     const Icon = useColorModeValue(<FaMoon />, <BsSunFill />);
-    const { userLoading, user, isLooggedIn } = useUser();
     const queryClient = useQueryClient();
 
-    async function onLogOut() {
-        const toastId = toast({
-            title: "Login out...",
-            description: "Try to log out",
-            status: "loading",
-        });
-
-        await logOut();
-
-        setTimeout(() => {
-            toast.update(toastId, {
-                title: "Log out successed",
-                description: "Good bye!",
-                status: "success",
+    const mutation = useMutation(logOut, {
+        onMutate: () => {
+            console.log("Logout mutation start.");
+            toastId.current = toast({
+                title: "Login out...",
+                description: "Try to log out",
+                status: "loading",
             });
-            queryClient.refetchQueries(["me"]);
-        }, 2000);
-    }
+        },
+
+        onSuccess: () => {
+            if (toastId.current) {
+                toast.update(toastId.current, {
+                    title: "Log out successed",
+                    description: "Good bye!",
+                    status: "success",
+                });
+                queryClient.refetchQueries(["me"]);
+            }
+        },
+    });
 
     return (
         <Stack
@@ -118,7 +124,9 @@ function Header() {
                                 ></Avatar>
                             </MenuButton>
                             <MenuList>
-                                <MenuItem onClick={onLogOut}>Logout</MenuItem>
+                                <MenuItem onClick={() => mutation.mutate()}>
+                                    Logout
+                                </MenuItem>
                             </MenuList>
                         </Menu>
                     )

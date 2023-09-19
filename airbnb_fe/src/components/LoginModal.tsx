@@ -66,8 +66,9 @@ export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
             console.log(result.login_success);
             console.log("Mutation failed.");
             toast({
-                title: "Occurred error!",
-                description: "Login failed",
+                title: "Login failed!",
+                description:
+                    "Please try again with correct username and password.",
                 status: "error",
             });
         },
@@ -102,7 +103,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
                                 isInvalid={Boolean(errors.username?.message)}
                                 variant={"filled"}
                                 placeholder="Username"
-                                required
                             ></Input>
                         </InputGroup>
 
@@ -121,7 +121,6 @@ export default function LoginModal({ isOpen, onClose }: LoginModelProps) {
                                 isInvalid={Boolean(errors.password?.message)}
                                 variant={"filled"}
                                 placeholder="Password"
-                                required
                             ></Input>
                         </InputGroup>
                     </VStack>
