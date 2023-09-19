@@ -2,7 +2,7 @@ import { Heading, Spinner, Text, VStack, useToast } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { githubLogin } from "../Api";
-import { useQueryClient } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 
 export default function GithubConfirm() {
     const location = useLocation();
@@ -10,32 +10,39 @@ export default function GithubConfirm() {
     const queryClient = useQueryClient();
     const navigate = useNavigate();
 
-    async function loginConfirm() {
-        const code = new URLSearchParams(location.search).get("code");
-        if (code) {
-            const status = await githubLogin(code);
+    const code = new URLSearchParams(location.search).get("code");
+    const mutation = useMutation(githubLogin, {
+        onMutate: () => {
+            // when start this mutation
+            console.log("start to mutation of github login function");
+        },
 
-            if (status === 200) {
-                toast({
-                    status: "success",
-                    title: "Login success",
-                    description: "Good to see you again 😎",
-                });
-                queryClient.refetchQueries(["me"]);
-            } else {
-                toast({
-                    status: "error",
-                    title: "Login failed",
-                    description:
-                        "Someting went wrong...😭 Please try check on your github account",
-                });
-            }
+        onSuccess: () => {
+            // when success this mutation
+            toast({
+                status: "success",
+                title: "Login success",
+                description: "Good to see you again 😎",
+            });
+            queryClient.refetchQueries(["me"]);
             navigate("/");
-        }
-    }
+        },
+
+        onError: () => {
+            toast({
+                status: "error",
+                title: "Login failed",
+                description:
+                    "Someting went wrong...😭 Please try check on your github account",
+            });
+            navigate("/");
+        },
+    });
 
     useEffect(() => {
-        loginConfirm();
+        if (code) {
+            mutation.mutate({ code });
+        }
     }, []);
 
     return (
