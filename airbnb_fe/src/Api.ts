@@ -40,7 +40,7 @@ export async function logOut() {
     return res.data;
 }
 
-export async function githubLogin(code: string) {
+export async function githubLogin({ code }: { code: string }) {
     const res = await axiosInstance.post(
         `users/github`,
         { code },
