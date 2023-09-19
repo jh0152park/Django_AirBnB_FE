@@ -65,3 +65,19 @@ export async function kakaoLogin(code: string) {
     );
     return res.status;
 }
+
+export async function usernameLogIn({
+    username,
+    password,
+}: IUsernameLogInVariables) {
+    const res = await axiosInstance.post(
+        `users/log-in`,
+        { username, password },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            },
+        }
+    );
+    return res.data;
+}

@@ -84,3 +84,16 @@ interface IMe {
     currency: string;
     is_host: boolean;
 }
+
+interface IUsernameLogInVariables {
+    username: string;
+    password: string;
+}
+
+interface IUsernameLogInSuccess {
+    login_success: boolean;
+}
+
+interface IUsernameLogInFail {
+    login_success: boolean;
+}
