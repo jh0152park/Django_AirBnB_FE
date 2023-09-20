@@ -124,6 +124,12 @@ function Header() {
                                 ></Avatar>
                             </MenuButton>
                             <MenuList>
+                                {user?.is_host ? (
+                                    <Link to="/rooms/upload">
+                                        <MenuItem>Upload New Room</MenuItem>
+                                    </Link>
+                                ) : null}
+
                                 <MenuItem onClick={() => mutation.mutate()}>
                                     Logout
                                 </MenuItem>

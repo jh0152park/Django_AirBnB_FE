@@ -37,7 +37,6 @@ export default function KakaoConfirm() {
             navigate("/");
         },
     });
-    // https://github.com/jh0152park/Django_AirBnB_FE/commit/8c390cd346640dd58cd7e394cabdd2a80783a43f
 
     useEffect(() => {
         if (code) {
