@@ -99,3 +99,13 @@ export async function signUpUser({
     );
     return res.data;
 }
+
+export async function getAmenities() {
+    const res = await axiosInstance.get("rooms/amenities/");
+    return res.data;
+}
+
+export async function getCategories() {
+    const res = await axiosInstance.get("categories/");
+    return res.data;
+}
