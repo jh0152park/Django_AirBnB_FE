@@ -33,11 +33,13 @@ interface IOwner {
 }
 
 interface ICategory {
+    pk: number;
     name: string;
     kind: string;
 }
 
 interface IAmenity {
+    pk: number;
     name: string;
     description: string | null;
 }
