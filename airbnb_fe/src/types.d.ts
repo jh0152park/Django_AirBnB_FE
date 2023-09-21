@@ -6,6 +6,7 @@ interface IRoomProps {
     price: number;
     city: string;
     country: string;
+    is_owner: boolean;
 }
 
 interface IPhotoSet {

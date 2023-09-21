@@ -5,6 +5,8 @@ import { useQuery } from "react-query";
 import { getRooms } from "../Api";
 
 export default function Home() {
+    const dummyImageUrl =
+        "https://images.unsplash.com/photo-1558481795-7f0a7c906f5e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1496&q=80";
     const { isLoading, data: rooms } = useQuery<IRoom[]>(["rooms"], getRooms);
 
     return (
@@ -38,12 +40,17 @@ export default function Home() {
                 <Room
                     key={index}
                     pk={room.pk}
-                    imageUrl={room.photo_set[0]?.file}
+                    imageUrl={
+                        room.photo_set[0]
+                            ? room.photo_set[0].file
+                            : dummyImageUrl
+                    }
                     name={room.name}
                     room_rate={room.room_rate}
                     price={room.price}
                     city={room.city}
                     country={room.country}
+                    is_owner={room.is_owner}
                 ></Room>
             ))}
         </Grid>
