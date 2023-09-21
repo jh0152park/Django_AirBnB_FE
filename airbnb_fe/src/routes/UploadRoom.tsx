@@ -12,21 +12,36 @@ import {
     InputGroup,
     InputLeftAddon,
     Select,
+    Text,
     Textarea,
     VStack,
+    useToast,
 } from "@chakra-ui/react";
 import HostOnlyPage from "../components/HostOnlyPage";
 import ProtectedPage from "../components/ProtectedPage";
 import { FaBed, FaDollarSign, FaToilet } from "react-icons/fa";
-import { useQuery } from "react-query";
-import { getAmenities, getCategories } from "../Api";
+import { useMutation, useQuery } from "react-query";
+import { getAmenities, getCategories, uploadRoom } from "../Api";
+import { useForm } from "react-hook-form";
 
 export default function UploadRoom() {
+    const { register, handleSubmit } = useForm<IRoomForm>();
     const Amenities = useQuery<IAmenity[]>(["amenities"], getAmenities);
     const Categories = useQuery<ICategory[]>(["categories"], getCategories);
 
-    console.log(Amenities.data, Amenities.isLoading);
-    console.log(Categories.data, Categories.isLoading);
+    const toast = useToast();
+    const mutation = useMutation(uploadRoom, {
+        onSuccess: () => {
+            toast({
+                status: "success",
+                title: "Upload Room Success!",
+            });
+        },
+    });
+
+    function onSubmit(data: IRoomForm) {
+        mutation.mutate(data);
+    }
 
     return (
         <ProtectedPage>
@@ -41,10 +56,16 @@ export default function UploadRoom() {
                 >
                     <Container>
                         <Heading textAlign={"center"}>Upload Room</Heading>
-                        <VStack spacing={10} as={"form"} mt={5}>
+                        <VStack
+                            spacing={10}
+                            as={"form"}
+                            mt={5}
+                            onSubmit={handleSubmit(onSubmit)}
+                        >
                             <FormControl>
                                 <FormLabel>Name</FormLabel>
                                 <Input
+                                    {...register("name", { required: true })}
                                     required
                                     type="text"
                                     placeholder="Name of your room"
@@ -53,6 +74,7 @@ export default function UploadRoom() {
                             <FormControl>
                                 <FormLabel>Country</FormLabel>
                                 <Input
+                                    {...register("country", { required: true })}
                                     required
                                     type="text"
                                     placeholder="Country where your room at"
@@ -61,6 +83,7 @@ export default function UploadRoom() {
                             <FormControl>
                                 <FormLabel>City</FormLabel>
                                 <Input
+                                    {...register("city", { required: true })}
                                     required
                                     type="text"
                                     placeholder="City where your room at"
@@ -69,6 +92,7 @@ export default function UploadRoom() {
                             <FormControl>
                                 <FormLabel>Address</FormLabel>
                                 <Input
+                                    {...register("address", { required: true })}
                                     required
                                     type="text"
                                     placeholder="Address where your room at"
@@ -81,6 +105,9 @@ export default function UploadRoom() {
                                         children={<FaDollarSign></FaDollarSign>}
                                     ></InputLeftAddon>
                                     <Input
+                                        {...register("price", {
+                                            required: true,
+                                        })}
                                         required
                                         type="number"
                                         min={0}
@@ -95,6 +122,9 @@ export default function UploadRoom() {
                                         children={<FaBed></FaBed>}
                                     ></InputLeftAddon>
                                     <Input
+                                        {...register("rooms", {
+                                            required: true,
+                                        })}
                                         required
                                         type="number"
                                         min={0}
@@ -109,6 +139,9 @@ export default function UploadRoom() {
                                         children={<FaToilet></FaToilet>}
                                     ></InputLeftAddon>
                                     <Input
+                                        {...register("toilets", {
+                                            required: true,
+                                        })}
                                         required
                                         type="number"
                                         min={0}
@@ -118,14 +151,27 @@ export default function UploadRoom() {
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Description</FormLabel>
-                                <Textarea></Textarea>
+                                <Textarea
+                                    {...register("description", {
+                                        required: true,
+                                    })}
+                                ></Textarea>
                             </FormControl>
                             <FormControl>
-                                <Checkbox>Pets Allowed?</Checkbox>
+                                <Checkbox
+                                    {...register("pet_allow", {
+                                        required: true,
+                                    })}
+                                >
+                                    Pets Allowed?
+                                </Checkbox>
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Kink of Room</FormLabel>
-                                <Select placeholder="Chooes a kind">
+                                <Select
+                                    placeholder="Chooes a kind"
+                                    {...register("kind", { required: true })}
+                                >
                                     <option value="entire_place">
                                         Entire Place
                                     </option>
@@ -142,7 +188,12 @@ export default function UploadRoom() {
                             </FormControl>
                             <FormControl>
                                 <FormLabel>Category of Room</FormLabel>
-                                <Select placeholder="Chooes a category">
+                                <Select
+                                    placeholder="Chooes a category"
+                                    {...register("category", {
+                                        required: true,
+                                    })}
+                                >
                                     {Categories.data?.map((category) => (
                                         <option
                                             value={category.pk}
@@ -161,7 +212,14 @@ export default function UploadRoom() {
                                 <Grid templateColumns={"1fr 1fr"} gap={5}>
                                     {Amenities.data?.map((amenity) => (
                                         <Box key={amenity.pk}>
-                                            <Checkbox>{amenity.name}</Checkbox>
+                                            <Checkbox
+                                                value={amenity.pk}
+                                                {...register("amenity", {
+                                                    required: true,
+                                                })}
+                                            >
+                                                {amenity.name}
+                                            </Checkbox>
                                             <FormHelperText>
                                                 {amenity.description}
                                             </FormHelperText>
@@ -169,7 +227,18 @@ export default function UploadRoom() {
                                     ))}
                                 </Grid>
                             </FormControl>
-                            <Button colorScheme={"red"} size={"lg"} w="100%">
+                            {mutation.isError ? (
+                                <Text color={"red.500"}>
+                                    Something went wrong
+                                </Text>
+                            ) : null}
+                            <Button
+                                type="submit"
+                                colorScheme={"red"}
+                                size={"lg"}
+                                w="100%"
+                                isLoading={mutation.isLoading}
+                            >
                                 Upload Room
                             </Button>
                         </VStack>

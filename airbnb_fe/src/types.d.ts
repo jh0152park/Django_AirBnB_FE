@@ -114,3 +114,19 @@ interface ISignUpSuccess {
 interface ISignUpError {
     fail: string;
 }
+
+interface IRoomForm {
+    name: string;
+    country: string;
+    city: string;
+    price: number;
+    rooms: number;
+    toilets: number;
+    description: string;
+    address: string;
+    pet_allow: boolean;
+    kind: string;
+    category: number;
+    owner: string;
+    amenity: number[];
+}
