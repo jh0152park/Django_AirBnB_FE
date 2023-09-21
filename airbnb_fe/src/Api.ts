@@ -109,3 +109,12 @@ export async function getCategories() {
     const res = await axiosInstance.get("categories/");
     return res.data;
 }
+
+export async function uploadRoom(variables: IRoomForm) {
+    const res = await axiosInstance.post(`rooms/`, variables, {
+        headers: {
+            "X-CSRFToken": Cookie.get("csrftoken") || "",
+        },
+    });
+    return res.data;
+}
