@@ -1,6 +1,6 @@
 import { Box, Button, HStack, Image, Text, VStack } from "@chakra-ui/react";
-import { FaRegHeart, FaStar } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { FaPencilAlt, FaRegHeart, FaStar } from "react-icons/fa";
+import { Link, useNavigate } from "react-router-dom";
 
 function numberWithCommas(number: number) {
     return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -14,7 +14,17 @@ export default function Room({
     price,
     city,
     country,
+    is_owner,
 }: IRoomProps) {
+    const navigate = useNavigate();
+
+    function onEditClick(event: React.SyntheticEvent<HTMLButtonElement>) {
+        event.preventDefault();
+        if (is_owner) {
+            navigate(`/rooms/${pk}/photos`);
+        }
+    }
+
     return (
         <Link to={`/rooms/${pk}`}>
             <VStack alignItems={"flex-start"}>
@@ -25,9 +35,10 @@ export default function Room({
                     mb={2}
                 >
                     <Image minHeight="280" src={imageUrl}></Image>
+
                     <Button
                         _hover={{
-                            color: "red.400",
+                            color: is_owner ? "yellow.400" : "red.400",
                         }}
                         variant={"unstyled"}
                         cursor={"pointer"}
@@ -35,8 +46,13 @@ export default function Room({
                         position={"absolute"}
                         top={0}
                         right={0}
+                        onClick={onEditClick}
                     >
-                        <FaRegHeart size={"20px"}></FaRegHeart>
+                        {is_owner ? (
+                            <FaPencilAlt size={"20px"} />
+                        ) : (
+                            <FaRegHeart size={"20px"} />
+                        )}
                     </Button>
                 </Box>
 
