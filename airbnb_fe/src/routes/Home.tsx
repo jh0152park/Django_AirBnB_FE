@@ -38,7 +38,7 @@ export default function Home() {
                 <Room
                     key={index}
                     pk={room.pk}
-                    imageUrl={room.photo_set[0].file}
+                    imageUrl={room.photo_set[0]?.file}
                     name={room.name}
                     room_rate={room.room_rate}
                     price={room.price}

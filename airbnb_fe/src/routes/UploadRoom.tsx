@@ -23,19 +23,26 @@ import { FaBed, FaDollarSign, FaToilet } from "react-icons/fa";
 import { useMutation, useQuery } from "react-query";
 import { getAmenities, getCategories, uploadRoom } from "../Api";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 
 export default function UploadRoom() {
-    const { register, handleSubmit } = useForm<IRoomForm>();
+    const { register, handleSubmit, reset } = useForm<IRoomForm>();
     const Amenities = useQuery<IAmenity[]>(["amenities"], getAmenities);
     const Categories = useQuery<ICategory[]>(["categories"], getCategories);
 
     const toast = useToast();
+    const navigate = useNavigate();
     const mutation = useMutation(uploadRoom, {
-        onSuccess: () => {
+        onMutate: () => {
+            console.log("start mutation");
+        },
+        onSuccess: (data: IRoomForm) => {
             toast({
                 status: "success",
                 title: "Upload Room Success!",
             });
+            reset();
+            navigate(`/rooms/${data.id}`);
         },
     });
 

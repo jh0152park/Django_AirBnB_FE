@@ -116,6 +116,7 @@ interface ISignUpError {
 }
 
 interface IRoomForm {
+    id: number;
     name: string;
     country: string;
     city: string;
