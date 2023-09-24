@@ -34,7 +34,11 @@ export default function Room({
                     rounded={"2xl"}
                     mb={2}
                 >
-                    <Image minHeight="280" src={imageUrl}></Image>
+                    <Image
+                        minHeight="280"
+                        src={imageUrl}
+                        objectFit={"cover"}
+                    ></Image>
 
                     <Button
                         _hover={{
@@ -57,8 +61,8 @@ export default function Room({
                 </Box>
 
                 {/* <Grid gap={2} templateColumns={"10fr 1fr"}> */}
-                <Box>
-                    <HStack w={"100%"} justifyContent={"space-between"}>
+                <Box w={"100%"}>
+                    <HStack justifyContent={"space-between"}>
                         <Box w={"90%"}>
                             <Text
                                 display={"block"}
