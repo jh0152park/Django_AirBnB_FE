@@ -118,3 +118,20 @@ export async function uploadRoom(variables: IRoomForm) {
     });
     return res.data;
 }
+
+export async function UploadPhotoImage({
+    roomPk,
+    file,
+    description,
+}: IUproadRoomPhotoVariables) {
+    const res = await axiosInstance.post(
+        `rooms/${roomPk}/photos`,
+        { file, description },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            },
+        }
+    );
+    return res.data;
+}

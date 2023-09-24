@@ -132,3 +132,9 @@ interface IRoomForm {
     owner: string;
     amenity: number[];
 }
+
+interface IUproadRoomPhotoVariables {
+    roomPk: string;
+    file: string;
+    description: string;
+}

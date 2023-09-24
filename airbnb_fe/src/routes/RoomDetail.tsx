@@ -78,7 +78,7 @@ export default function RoomDetail() {
                         key={index}
                     >
                         <Skeleton isLoaded={!isLoading} h="100%" w="100%">
-                            {data?.photo_set && data.photo_set.length > 0 ? (
+                            {data?.photo_set && data?.photo_set[index] ? (
                                 <Image
                                     objectFit={"cover"}
                                     w="100%"
