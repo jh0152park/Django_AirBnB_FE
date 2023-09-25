@@ -19,7 +19,7 @@ import { FaStar } from "react-icons/fa";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import type { Value } from "react-calendar/dist/cjs/shared/types";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function RoomDetail() {
     const { roomPk } = useParams();
@@ -33,7 +33,16 @@ export default function RoomDetail() {
 
     const DAY = 60 * 60 * 24;
     const MONTH = DAY * 30;
-    const [dates, setDates] = useState<Value>();
+    const [dates, setDates] = useState<Date[]>();
+
+    useEffect(() => {
+        if (dates) {
+            const [first, second] = dates;
+            const checkIn = first.toJSON().split("T")[0];
+            const checkOut = second.toJSON().split("T")[0];
+            console.log(checkIn, checkOut);
+        }
+    }, [dates]);
 
     return (
         <Box
@@ -135,7 +144,7 @@ export default function RoomDetail() {
                 </HStack>
                 <Box mt={5} ml={"55px"}>
                     <Calendar
-                        onChange={setDates}
+                        onChange={setDates as any}
                         next2Label={null}
                         prev2Label={null}
                         minDetail="month"
