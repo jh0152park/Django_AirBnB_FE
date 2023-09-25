@@ -99,8 +99,12 @@ export default function RoomDetail() {
                 ))}
             </Grid>
 
-            <Grid templateColumns={"1fr 1fr"} w={"100%"}>
-                <HStack w={"90%"} mt={10} justifyContent={"space-between"}>
+            <HStack w={"100%"}>
+                <HStack
+                    w={"45%"}
+                    mt={"-190px"}
+                    justifyContent={"space-between"}
+                >
                     <VStack alignItems={"flex-start"}>
                         <Skeleton isLoaded={!isLoading} height={"30px"}>
                             <Heading fontSize={"2xl"}>
@@ -129,7 +133,7 @@ export default function RoomDetail() {
                         src={data?.owner.profile_picture}
                     ></Avatar>
                 </HStack>
-                <Box pt={10}>
+                <Box mt={5} ml={"55px"}>
                     <Calendar
                         onChange={setDates}
                         next2Label={null}
@@ -140,7 +144,7 @@ export default function RoomDetail() {
                         selectRange
                     ></Calendar>
                 </Box>
-            </Grid>
+            </HStack>
 
             <Box mt={10} alignItems={"center"}>
                 <Skeleton isLoaded={!isLoading} h="40px" w={"20%"}>
