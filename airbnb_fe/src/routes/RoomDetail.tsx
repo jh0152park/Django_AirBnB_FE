@@ -16,6 +16,10 @@ import {
     VStack,
 } from "@chakra-ui/react";
 import { FaStar } from "react-icons/fa";
+import Calendar from "react-calendar";
+import "react-calendar/dist/Calendar.css";
+import type { Value } from "react-calendar/dist/cjs/shared/types";
+import { useState } from "react";
 
 export default function RoomDetail() {
     const { roomPk } = useParams();
@@ -26,6 +30,10 @@ export default function RoomDetail() {
     const { isLoading: isReviewsLoading, data: ReviewData } = useQuery<
         IReview[]
     >(["room", roomPk, "reviews"], getRoomReviews);
+
+    const DAY = 60 * 60 * 24;
+    const MONTH = DAY * 30;
+    const [dates, setDates] = useState<Value>();
 
     return (
         <Box
@@ -91,35 +99,48 @@ export default function RoomDetail() {
                 ))}
             </Grid>
 
-            {/* Host and room info */}
-            <HStack w={"40%"} mt={10} justifyContent={"space-between"}>
-                <VStack alignItems={"flex-start"}>
-                    <Skeleton isLoaded={!isLoading} height={"30px"}>
-                        <Heading fontSize={"2xl"}>
-                            House hosted by {data?.owner.name}
-                        </Heading>
-                    </Skeleton>
+            <Grid templateColumns={"1fr 1fr"} w={"100%"}>
+                <HStack w={"90%"} mt={10} justifyContent={"space-between"}>
+                    <VStack alignItems={"flex-start"}>
+                        <Skeleton isLoaded={!isLoading} height={"30px"}>
+                            <Heading fontSize={"2xl"}>
+                                House hosted by {data?.owner.name}
+                            </Heading>
+                        </Skeleton>
 
-                    <Skeleton isLoaded={!isLoading}>
-                        <HStack justifyContent={"flex-start"} w="100%">
-                            <Text>
-                                {data?.toilets} toilet
-                                {data?.toilets === 1 ? "" : "s"}
-                            </Text>
-                            <Text>∙</Text>
-                            <Text>
-                                {data?.rooms} room{data?.rooms === 1 ? "" : "s"}
-                            </Text>
-                        </HStack>
-                    </Skeleton>
-                </VStack>
+                        <Skeleton isLoaded={!isLoading}>
+                            <HStack justifyContent={"flex-start"} w="100%">
+                                <Text>
+                                    {data?.toilets} toilet
+                                    {data?.toilets === 1 ? "" : "s"}
+                                </Text>
+                                <Text>∙</Text>
+                                <Text>
+                                    {data?.rooms} room
+                                    {data?.rooms === 1 ? "" : "s"}
+                                </Text>
+                            </HStack>
+                        </Skeleton>
+                    </VStack>
 
-                <Avatar
-                    name={data?.owner.name}
-                    size={"lg"}
-                    src={data?.owner.profile_picture}
-                ></Avatar>
-            </HStack>
+                    <Avatar
+                        name={data?.owner.name}
+                        size={"lg"}
+                        src={data?.owner.profile_picture}
+                    ></Avatar>
+                </HStack>
+                <Box pt={10}>
+                    <Calendar
+                        onChange={setDates}
+                        next2Label={null}
+                        prev2Label={null}
+                        minDetail="month"
+                        minDate={new Date()}
+                        maxDate={new Date(Date.now() + MONTH * 6 * 1000)}
+                        selectRange
+                    ></Calendar>
+                </Box>
+            </Grid>
 
             <Box mt={10} alignItems={"center"}>
                 <Skeleton isLoaded={!isLoading} h="40px" w={"20%"}>
@@ -211,6 +232,8 @@ export default function RoomDetail() {
                     </Grid>
                 </Container>
             </Box>
+
+            {/* Host and room info */}
         </Box>
     );
 }
