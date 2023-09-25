@@ -135,3 +135,23 @@ export async function UploadPhotoImage({
     );
     return res.data;
 }
+
+type CheckBookingQeuryKey = [string, Date[]?, string?];
+
+export async function checkBooingPossible({
+    queryKey,
+}: QueryFunctionContext<CheckBookingQeuryKey>) {
+    const [_, dates, roomPk] = queryKey;
+
+    if (dates) {
+        const [first, second] = dates;
+        const checkIn = first.toJSON().split("T")[0];
+        const checkOut = second.toJSON().split("T")[0];
+        console.log(checkIn, checkOut);
+
+        const res = await axiosInstance.get(
+            `rooms/${roomPk}/bookings/check?check_in=${checkIn}&check_out=${checkOut}`
+        );
+        return res.data;
+    }
+}
