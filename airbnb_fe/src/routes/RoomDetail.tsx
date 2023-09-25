@@ -1,9 +1,10 @@
 import { useQuery } from "react-query";
 import { useParams } from "react-router-dom";
-import { getRoom, getRoomReviews } from "../Api";
+import { checkBooingPossible, getRoom, getRoomReviews } from "../Api";
 import {
     Avatar,
     Box,
+    Button,
     Container,
     Grid,
     GridItem,
@@ -33,16 +34,21 @@ export default function RoomDetail() {
 
     const DAY = 60 * 60 * 24;
     const MONTH = DAY * 30;
+
     const [dates, setDates] = useState<Date[]>();
 
-    useEffect(() => {
-        if (dates) {
-            const [first, second] = dates;
-            const checkIn = first.toJSON().split("T")[0];
-            const checkOut = second.toJSON().split("T")[0];
-            console.log(checkIn, checkOut);
+    const bookingPossible = useQuery(
+        ["checkBooking", dates, roomPk],
+        checkBooingPossible,
+        {
+            enabled: dates !== undefined,
+            cacheTime: 0,
         }
-    }, [dates]);
+    );
+
+    console.log("booking result");
+    console.log(bookingPossible.isLoading);
+    console.log(bookingPossible.data);
 
     return (
         <Box
@@ -110,7 +116,7 @@ export default function RoomDetail() {
 
             <HStack w={"100%"}>
                 <HStack
-                    w={"45%"}
+                    w={"50%"}
                     mt={"-190px"}
                     justifyContent={"space-between"}
                 >
@@ -142,16 +148,33 @@ export default function RoomDetail() {
                         src={data?.owner.profile_picture}
                     ></Avatar>
                 </HStack>
-                <Box mt={5} ml={"55px"}>
-                    <Calendar
-                        onChange={setDates as any}
-                        next2Label={null}
-                        prev2Label={null}
-                        minDetail="month"
-                        minDate={new Date()}
-                        maxDate={new Date(Date.now() + MONTH * 6 * 1000)}
-                        selectRange
-                    ></Calendar>
+                <Box mt={5} w={"50%"} h={"100%"} justifyContent={"center"}>
+                    <VStack>
+                        <Calendar
+                            onChange={setDates as any}
+                            next2Label={null}
+                            prev2Label={null}
+                            minDetail="month"
+                            minDate={new Date()}
+                            maxDate={new Date(Date.now() + MONTH * 6 * 1000)}
+                            selectRange
+                        ></Calendar>
+                        <Button
+                            mt={5}
+                            w={"50%"}
+                            colorScheme="red"
+                            isLoading={bookingPossible.isLoading}
+                            isDisabled={bookingPossible.data?.ok === false}
+                        >
+                            Booking
+                        </Button>
+                        {bookingPossible.data?.ok == false &&
+                        !bookingPossible.isLoading ? (
+                            <Text color={"red.500"}>
+                                Can't book on those dates, sorry.
+                            </Text>
+                        ) : null}
+                    </VStack>
                 </Box>
             </HStack>
 
