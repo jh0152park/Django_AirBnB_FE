@@ -21,13 +21,22 @@ import HostOnlyPage from "../components/HostOnlyPage";
 import ProtectedPage from "../components/ProtectedPage";
 import { FaBed, FaDollarSign, FaToilet } from "react-icons/fa";
 import { useMutation, useQuery } from "react-query";
-import { getAmenities, getCategories, getRoom, uploadRoom } from "../Api";
+import {
+    editRoom,
+    getAmenities,
+    getCategories,
+    getRoom,
+    uploadRoom,
+} from "../Api";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import { watch } from "fs";
+import { useEffect } from "react";
 
 export default function EditRoom() {
-    const { roomPk } = useParams();
-    const { register, handleSubmit, reset } = useForm<IRoomForm>();
+    const { roomPk } = useParams<string>();
+    const { register, handleSubmit, reset, watch, setValue } =
+        useForm<IRoomForm>();
     const Amenities = useQuery<IAmenity[]>(["amenities"], getAmenities);
     const Categories = useQuery<ICategory[]>(["categories"], getCategories);
     const { isLoading, data } = useQuery<IRoomDetail>(
@@ -36,30 +45,56 @@ export default function EditRoom() {
     );
 
     let currentAmenities: number[] = [];
+    const toast = useToast();
+    const navigate = useNavigate();
+    const mutation = useMutation(editRoom, {
+        onMutate: () => {
+            console.log("start mutation");
+        },
+        onSuccess: (data: IRoomForm) => {
+            toast({
+                status: "success",
+                title: "Upload Room Success!",
+            });
+            reset();
+            navigate(`/rooms/${data.id}`);
+        },
+        onError: (error) => {
+            console.log(error);
+        },
+    });
 
-    if (Amenities.data && data) {
-        data.amenity.map((amenity) => currentAmenities.push(amenity.pk));
+    function onSubmit(data: IRoomForm) {
+        if (roomPk) {
+            console.log("on submit");
+            console.log(data);
+
+            mutation.mutate({ roomPk, data });
+        }
     }
 
-    // const toast = useToast();
-    // const navigate = useNavigate();
-    // const mutation = useMutation(uploadRoom, {
-    //     onMutate: () => {
-    //         console.log("start mutation");
-    //     },
-    //     onSuccess: (data: IRoomForm) => {
-    //         toast({
-    //             status: "success",
-    //             title: "Upload Room Success!",
-    //         });
-    //         reset();
-    //         navigate(`/rooms/${data.id}`);
-    //     },
-    // });
+    useEffect(() => {
+        if (Amenities.data && data) {
+            data.amenity.map((amenity) => currentAmenities.push(amenity.pk));
+        }
 
-    // function onSubmit(data: IRoomForm) {
-    //     mutation.mutate(data);
-    // }
+        if (data) {
+            console.log(data);
+            console.log(currentAmenities);
+
+            setValue("name", data.name);
+            setValue("country", data.country);
+            setValue("city", data.city);
+            setValue("address", data.address);
+            setValue("price", data.price);
+            setValue("rooms", data.rooms);
+            setValue("toilets", data.toilets);
+            setValue("description", data.description);
+            setValue("kind", data.kind);
+            setValue("category", data.category.pk);
+            setValue("amenity", currentAmenities);
+        }
+    }, [isLoading]);
 
     return (
         <>
@@ -82,7 +117,7 @@ export default function EditRoom() {
                                     spacing={10}
                                     as={"form"}
                                     mt={5}
-                                    // onSubmit={handleSubmit(onSubmit)}
+                                    onSubmit={handleSubmit(onSubmit)}
                                 >
                                     <FormControl>
                                         <FormLabel>Name</FormLabel>
@@ -92,7 +127,6 @@ export default function EditRoom() {
                                             })}
                                             required
                                             type="text"
-                                            value={data?.name}
                                         ></Input>
                                     </FormControl>
                                     <FormControl>
@@ -103,7 +137,6 @@ export default function EditRoom() {
                                             })}
                                             required
                                             type="text"
-                                            value={data?.country}
                                         ></Input>
                                     </FormControl>
                                     <FormControl>
@@ -114,7 +147,6 @@ export default function EditRoom() {
                                             })}
                                             required
                                             type="text"
-                                            value={data?.city}
                                         ></Input>
                                     </FormControl>
                                     <FormControl>
@@ -125,7 +157,6 @@ export default function EditRoom() {
                                             })}
                                             required
                                             type="text"
-                                            value={data?.address}
                                         ></Input>
                                     </FormControl>
                                     <FormControl>
@@ -143,7 +174,6 @@ export default function EditRoom() {
                                                 required
                                                 type="number"
                                                 min={0}
-                                                value={data?.price + ""}
                                             ></Input>
                                         </InputGroup>
                                     </FormControl>
@@ -160,7 +190,6 @@ export default function EditRoom() {
                                                 required
                                                 type="number"
                                                 min={0}
-                                                value={data?.rooms + ""}
                                             ></Input>
                                         </InputGroup>
                                     </FormControl>
@@ -177,7 +206,6 @@ export default function EditRoom() {
                                                 required
                                                 type="number"
                                                 min={0}
-                                                value={data?.toilets + ""}
                                             ></Input>
                                         </InputGroup>
                                     </FormControl>
@@ -187,23 +215,17 @@ export default function EditRoom() {
                                             {...register("description", {
                                                 required: true,
                                             })}
-                                            value={data?.description}
                                         ></Textarea>
                                     </FormControl>
                                     <FormControl>
-                                        <Checkbox
-                                            {...register("pet_allow", {
-                                                required: true,
-                                            })}
-                                            isChecked={data?.pet_allow}
-                                        >
+                                        <Checkbox {...register("pet_allow")}>
                                             Pets Allowed?
                                         </Checkbox>
                                     </FormControl>
                                     <FormControl>
                                         <FormLabel>Kink of Room</FormLabel>
                                         <Select
-                                            placeholder={data?.kind}
+                                            placeholder="Chooes a kind"
                                             {...register("kind", {
                                                 required: true,
                                             })}
@@ -225,7 +247,7 @@ export default function EditRoom() {
                                     <FormControl>
                                         <FormLabel>Category of Room</FormLabel>
                                         <Select
-                                            placeholder={data?.category.name}
+                                            placeholder="Chooes a category"
                                             {...register("category", {
                                                 required: true,
                                             })}
@@ -254,9 +276,6 @@ export default function EditRoom() {
                                             {Amenities.data?.map((amenity) => (
                                                 <Box key={amenity.pk}>
                                                     <Checkbox
-                                                        isChecked={currentAmenities.includes(
-                                                            amenity.pk
-                                                        )}
                                                         value={amenity.pk}
                                                         {...register(
                                                             "amenity",

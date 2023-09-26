@@ -36,13 +36,14 @@ export default function UploadRoom() {
         onMutate: () => {
             console.log("start mutation");
         },
-        onSuccess: (data: IRoomForm) => {
+        onSuccess: () => {
             toast({
                 status: "success",
                 title: "Upload Room Success!",
             });
             reset();
-            navigate(`/rooms/${data.id}`);
+            navigate("/");
+            // navigate(`/rooms/${data.id}`);
         },
     });
 
@@ -165,11 +166,7 @@ export default function UploadRoom() {
                                 ></Textarea>
                             </FormControl>
                             <FormControl>
-                                <Checkbox
-                                    {...register("pet_allow", {
-                                        required: true,
-                                    })}
-                                >
+                                <Checkbox {...register("pet_allow")}>
                                     Pets Allowed?
                                 </Checkbox>
                             </FormControl>
