@@ -21,6 +21,7 @@ import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import type { Value } from "react-calendar/dist/cjs/shared/types";
 import { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 
 export default function RoomDetail() {
     const { roomPk } = useParams();
@@ -58,6 +59,9 @@ export default function RoomDetail() {
             }}
             mt={10}
         >
+            <Helmet>
+                <title>{data ? data.name : "Loading..."}</title>
+            </Helmet>
             {/* Title and tiny imfo */}
             <Stack>
                 <Skeleton w="50%" h="40px" isLoaded={!isLoading}>
