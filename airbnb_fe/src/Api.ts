@@ -1,6 +1,7 @@
 import Cookie from "js-cookie";
 import axios from "axios";
 import { QueryFunctionContext } from "react-query";
+import { formAtDate } from "./lib/utils";
 
 const axiosInstance = axios.create({
     baseURL: "http://127.0.0.1:8000/api/v1/",
@@ -145,8 +146,9 @@ export async function checkBooingPossible({
 
     if (dates) {
         const [first, second] = dates;
-        const checkIn = first.toJSON().split("T")[0];
-        const checkOut = second.toJSON().split("T")[0];
+        const checkIn = formAtDate(first);
+        const checkOut = formAtDate(second);
+
         console.log(checkIn, checkOut);
 
         const res = await axiosInstance.get(
