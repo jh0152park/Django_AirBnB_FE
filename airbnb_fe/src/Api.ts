@@ -157,3 +157,29 @@ export async function checkBooingPossible({
         return res.data;
     }
 }
+
+interface IEditRoomForm {
+    roomPk: string;
+    data: IRoomForm;
+}
+
+export async function editRoom({ roomPk, data }: IEditRoomForm) {
+    console.log("edit room function called");
+    console.log(data);
+    console.log(roomPk);
+
+    const test_data = {
+        name: "test_data",
+    };
+
+    const res = await axiosInstance.put(
+        `rooms/${roomPk}`,
+        { data },
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            },
+        }
+    );
+    return res.data;
+}
