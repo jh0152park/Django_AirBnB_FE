@@ -49,7 +49,7 @@ interface IRoomDetail {
     id: number;
     owner: IOwner;
     category: ICategory;
-    amenity: IAmenity;
+    amenity: IAmenity[];
     room_rate: number;
     is_owner: boolean;
     is_liked: boolean;
