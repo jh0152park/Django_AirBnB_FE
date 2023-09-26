@@ -65,7 +65,7 @@ interface IRoomDetail {
     description: string;
     address: string;
     pet_allow: boolean;
-    kink: string;
+    kind: string;
     review_count: number;
 }
 

@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { checkBooingPossible, getRoom, getRoomReviews } from "../Api";
 import {
     Avatar,
@@ -16,7 +16,7 @@ import {
     Text,
     VStack,
 } from "@chakra-ui/react";
-import { FaStar } from "react-icons/fa";
+import { FaPencilAlt, FaStar } from "react-icons/fa";
 import Calendar from "react-calendar";
 import "react-calendar/dist/Calendar.css";
 import type { Value } from "react-calendar/dist/cjs/shared/types";
@@ -37,6 +37,7 @@ export default function RoomDetail() {
     const MONTH = DAY * 30;
 
     const [dates, setDates] = useState<Date[]>();
+    const navigate = useNavigate();
 
     const bookingPossible = useQuery(
         ["checkBooking", dates, roomPk],
@@ -47,9 +48,9 @@ export default function RoomDetail() {
         }
     );
 
-    console.log("booking result");
-    console.log(bookingPossible.isLoading);
-    console.log(bookingPossible.data);
+    function editRoomDetail() {
+        navigate(`/rooms/${roomPk}/edit`);
+    }
 
     return (
         <Box
@@ -64,9 +65,18 @@ export default function RoomDetail() {
             </Helmet>
             {/* Title and tiny imfo */}
             <Stack>
-                <Skeleton w="50%" h="40px" isLoaded={!isLoading}>
-                    <Heading w="100vw" fontSize={"35px"}>
+                <Skeleton w="100%" h="40px" isLoaded={!isLoading}>
+                    <Heading w="100%" fontSize={"35px"}>
                         {data ? data.name : "Loading..."}
+                        {data?.is_owner ? (
+                            <Button
+                                bg={"none"}
+                                _hover={{ color: "yellow.400" }}
+                                onClick={editRoomDetail}
+                            >
+                                <FaPencilAlt />
+                            </Button>
+                        ) : null}
                     </Heading>
                 </Skeleton>
 
@@ -119,39 +129,57 @@ export default function RoomDetail() {
             </Grid>
 
             <HStack w={"100%"}>
-                <HStack
-                    w={"50%"}
-                    mt={"-190px"}
-                    justifyContent={"space-between"}
-                >
-                    <VStack alignItems={"flex-start"}>
-                        <Skeleton isLoaded={!isLoading} height={"30px"}>
-                            <Heading fontSize={"2xl"}>
-                                House hosted by {data?.owner.name}
-                            </Heading>
-                        </Skeleton>
+                <VStack w={"50%"}>
+                    <HStack
+                        w={"100%"}
+                        justifyContent={"space-between"}
+                        align={"flex-start"}
+                    >
+                        <VStack alignItems={"flex-start"}>
+                            <Skeleton isLoaded={!isLoading} height={"30px"}>
+                                <Heading fontSize={"2xl"}>
+                                    House hosted by {data?.owner.name}
+                                </Heading>
+                            </Skeleton>
 
-                        <Skeleton isLoaded={!isLoading}>
-                            <HStack justifyContent={"flex-start"} w="100%">
-                                <Text>
-                                    {data?.toilets} toilet
-                                    {data?.toilets === 1 ? "" : "s"}
-                                </Text>
-                                <Text>∙</Text>
-                                <Text>
-                                    {data?.rooms} room
-                                    {data?.rooms === 1 ? "" : "s"}
-                                </Text>
-                            </HStack>
-                        </Skeleton>
-                    </VStack>
+                            <Skeleton isLoaded={!isLoading}>
+                                <HStack justifyContent={"flex-start"} w="100%">
+                                    <Text>
+                                        {data?.toilets} toilet
+                                        {data?.toilets === 1 ? "" : "s"}
+                                    </Text>
+                                    <Text>∙</Text>
+                                    <Text>
+                                        {data?.rooms} room
+                                        {data?.rooms === 1 ? "" : "s"}
+                                    </Text>
+                                    <Text>∙</Text>
+                                    <Text>
+                                        Pets {data?.pet_allow ? "" : "not "}{" "}
+                                        allowed
+                                        {data?.pet_allow ? " 🐶" : " 😭"}
+                                    </Text>
+                                </HStack>
+                            </Skeleton>
+                        </VStack>
 
-                    <Avatar
-                        name={data?.owner.name}
-                        size={"lg"}
-                        src={data?.owner.profile_picture}
-                    ></Avatar>
-                </HStack>
+                        <Avatar
+                            name={data?.owner.name}
+                            size={"lg"}
+                            src={data?.owner.profile_picture}
+                        ></Avatar>
+                    </HStack>
+
+                    <Box w={"100%"} h={"250px"} mt={2} overflow={"hidden"}>
+                        <Text as="b">Description🗒️</Text>
+                        {data?.description.split("\n").map((text, index) => (
+                            <Text key={index}>
+                                {text}
+                                <br></br>
+                            </Text>
+                        ))}
+                    </Box>
+                </VStack>
                 <Box mt={5} w={"50%"} h={"100%"} justifyContent={"center"}>
                     <VStack>
                         <Calendar
