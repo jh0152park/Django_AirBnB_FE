@@ -133,6 +133,21 @@ interface IRoomForm {
     amenity: number[];
 }
 
+interface IEditRoomForm {
+    address: string;
+    amenity: number[];
+    categories: number;
+    city: string;
+    country: string;
+    description: string;
+    kind: string;
+    name: string;
+    pet_allow: boolean;
+    price: number;
+    rooms: number;
+    toilets: number;
+}
+
 interface IUproadRoomPhotoVariables {
     roomPk: string;
     file: string;
