@@ -64,7 +64,7 @@ export default function EditRoom() {
         },
     });
 
-    function onSubmit(data: IRoomForm) {
+    function onSubmit(data: any) {
         if (roomPk) {
             console.log("on submit");
             console.log(data);
