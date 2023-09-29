@@ -9,6 +9,7 @@ import KakaoConfirm from "./routes/KakaoConfirm";
 import UploadRoom from "./routes/UploadRoom";
 import UploadPhotos from "./routes/UploadPhotos";
 import EditRoom from "./routes/EditRoom";
+import MyPages from "./routes/MyPages";
 // import path from "path";
 
 const router = createBrowserRouter([
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
             {
                 path: "rooms/:roomPk/edit",
                 element: <EditRoom />,
+            },
+            {
+                path: ":username/mypages",
+                element: <MyPages />,
             },
             {
                 path: "social",
