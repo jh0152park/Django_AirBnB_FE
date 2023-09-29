@@ -27,8 +27,20 @@ export async function getRoomReviews({ queryKey }: QueryFunctionContext) {
     return res.data;
 }
 
+export async function getMyRoomBookings({ queryKey }: QueryFunctionContext) {
+    // eslint-disable-next-line
+    const [hostId] = queryKey;
+    const res = await axiosInstance.get(`bookings/${hostId}`);
+    return res.data;
+}
+
 export async function getMe() {
     const res = await axiosInstance.get(`users/me`);
+    return res.data;
+}
+
+export async function getMyReservation() {
+    const res = await axiosInstance.get(`bookings/`);
     return res.data;
 }
 
@@ -152,7 +164,7 @@ export async function checkBooingPossible({
         console.log(checkIn, checkOut);
 
         const res = await axiosInstance.get(
-            `rooms/${roomPk}/bookings/check?check_in=${checkIn}&check_out=${checkOut}`
+            `rooms/${roomPk}/bookings/check?check_in_date=${checkIn}&check_out_date=${checkOut}`
         );
         return res.data;
     }
@@ -173,5 +185,28 @@ export async function editRoom({ roomPk, data }: IEditRoomForm) {
             "X-CSRFToken": Cookie.get("csrftoken") || "",
         },
     });
+    return res.data;
+}
+
+interface ICreateBookingForm {
+    roomPk: string;
+    check_in_date: string;
+    check_out_date: string;
+    guests: number;
+}
+
+export async function createBooking(request: ICreateBookingForm) {
+    console.log("create booking function called");
+    console.log(request);
+
+    const res = await axiosInstance.post(
+        `rooms/${request.roomPk}/bookings`,
+        request,
+        {
+            headers: {
+                "X-CSRFToken": Cookie.get("csrftoken") || "",
+            },
+        }
+    );
     return res.data;
 }

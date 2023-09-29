@@ -153,3 +153,33 @@ interface IUproadRoomPhotoVariables {
     file: string;
     description: string;
 }
+
+interface IRoomReservationForm {
+    name: string;
+}
+
+interface IExperienceReservationForm {
+    name: string;
+}
+
+interface IReservationForm {
+    pk: number;
+    check_in_date: string;
+    check_out_date: string;
+    experience_time: string;
+    guests: number;
+    room: IRoomReservationForm | null;
+    experience: IExperienceReservationForm | null;
+}
+
+interface IReservationRoom {
+    guests: number;
+    user: string;
+    check_in: string;
+    check_out: string;
+}
+
+interface IMyRoomReservationForm {
+    room: string;
+    reservations: IReservationRoom[];
+}

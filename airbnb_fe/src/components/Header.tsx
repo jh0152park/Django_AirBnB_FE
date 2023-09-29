@@ -129,6 +129,9 @@ function Header() {
                                         <MenuItem>Upload New Room</MenuItem>
                                     </Link>
                                 ) : null}
+                                <Link to={`/${user?.username}/mypages`}>
+                                    <MenuItem>My Pages</MenuItem>
+                                </Link>
 
                                 <MenuItem onClick={() => mutation.mutate()}>
                                     Logout

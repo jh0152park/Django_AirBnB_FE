@@ -1,6 +1,11 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useNavigate, useParams } from "react-router-dom";
-import { checkBooingPossible, getRoom, getRoomReviews } from "../Api";
+import {
+    checkBooingPossible,
+    createBooking,
+    getRoom,
+    getRoomReviews,
+} from "../Api";
 import {
     Avatar,
     Box,
@@ -11,10 +16,16 @@ import {
     HStack,
     Heading,
     Image,
+    NumberDecrementStepper,
+    NumberIncrementStepper,
+    NumberInput,
+    NumberInputField,
+    NumberInputStepper,
     Skeleton,
     Stack,
     Text,
     VStack,
+    useToast,
 } from "@chakra-ui/react";
 import { FaPencilAlt, FaStar } from "react-icons/fa";
 import Calendar from "react-calendar";
@@ -22,6 +33,8 @@ import "react-calendar/dist/Calendar.css";
 import type { Value } from "react-calendar/dist/cjs/shared/types";
 import { useEffect, useState } from "react";
 import { Helmet } from "react-helmet";
+import { useForm } from "react-hook-form";
+import { formAtDate } from "../lib/utils";
 
 export default function RoomDetail() {
     const { roomPk } = useParams();
@@ -36,7 +49,10 @@ export default function RoomDetail() {
     const DAY = 60 * 60 * 24;
     const MONTH = DAY * 30;
 
+    const [guests, setGuests] = useState<number>(1);
     const [dates, setDates] = useState<Date[]>();
+
+    const toast = useToast();
     const navigate = useNavigate();
 
     const bookingPossible = useQuery(
@@ -50,6 +66,36 @@ export default function RoomDetail() {
 
     function editRoomDetail() {
         navigate(`/rooms/${roomPk}/edit`);
+    }
+
+    const mutation = useMutation(createBooking, {
+        onMutate: () => {
+            console.log("create booking mutation start");
+        },
+        onSuccess: () => {
+            console.log("create booking mutation success");
+            toast({
+                status: "success",
+                title: "Success",
+                description: "Booking Done ☺️",
+            });
+        },
+    });
+
+    function onBookingClick() {
+        if (dates && guests && roomPk) {
+            console.log("Booking clicked");
+            const [first, second] = dates;
+            const checkIn = formAtDate(first);
+            const checkOut = formAtDate(second);
+            const request = {
+                roomPk: roomPk,
+                guests: guests,
+                check_in_date: checkIn,
+                check_out_date: checkOut,
+            };
+            mutation.mutate(request);
+        }
     }
 
     return (
@@ -191,15 +237,36 @@ export default function RoomDetail() {
                             maxDate={new Date(Date.now() + MONTH * 6 * 1000)}
                             selectRange
                         ></Calendar>
-                        <Button
-                            mt={5}
-                            w={"50%"}
-                            colorScheme="red"
-                            isLoading={bookingPossible.isLoading}
-                            isDisabled={bookingPossible.data?.ok === false}
-                        >
-                            Booking
-                        </Button>
+
+                        <HStack alignItems={"center"}>
+                            <Button
+                                mt={5}
+                                w={"50%"}
+                                colorScheme="red"
+                                isLoading={
+                                    bookingPossible.isLoading ||
+                                    mutation.isLoading
+                                }
+                                isDisabled={bookingPossible.data?.ok === false}
+                                onClick={onBookingClick}
+                            >
+                                Booking
+                            </Button>
+                            <NumberInput
+                                defaultValue={1}
+                                min={1}
+                                max={5}
+                                mt={5}
+                                onChange={setGuests as any}
+                            >
+                                <NumberInputField />
+                                <NumberInputStepper>
+                                    <NumberIncrementStepper />
+                                    <NumberDecrementStepper />
+                                </NumberInputStepper>
+                            </NumberInput>
+                        </HStack>
+
                         {bookingPossible.data?.ok == false &&
                         !bookingPossible.isLoading ? (
                             <Text color={"red.500"}>
@@ -229,7 +296,7 @@ export default function RoomDetail() {
                     <Grid templateColumns={"repeat(2, 1fr)"} gap={10}>
                         {isReviewsLoading
                             ? [1, 2, 3, 4].map((dummy) => (
-                                  <Box>
+                                  <Box key={dummy}>
                                       <VStack alignItems={"flex-start"}>
                                           <HStack>
                                               <Avatar size={"md"}></Avatar>
@@ -265,7 +332,7 @@ export default function RoomDetail() {
                                   </Box>
                               ))
                             : ReviewData?.map((review, index) => (
-                                  <Box>
+                                  <Box key={index}>
                                       <VStack alignItems={"flex-start"}>
                                           <HStack>
                                               <Avatar
